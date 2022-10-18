@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
 
+import React, { useEffect, useState } from 'react'
+import SearchBox from './Components/SearchBox';
+import CardList from './Components/CardList';
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  const [user,setUser] = useState([]);
+  const [search,setSearch] = useState("")
 
-export default App;
+  const fetchData=()=>{
+    fetch('https://jsonplaceholder.typicode.com/users')
+    .then((response) => response.json())
+    .then((data)=>setUser(data));
+  }
+ useEffect(()=>{
+  fetchData();
+ },[])
+
+   const filteredAvator = user.filter(userInfo => userInfo.name.toLowerCase().includes(search.toLowerCase()));
+  return (
+    <div>
+      <h1>Avators</h1>
+      <SearchBox
+      placeholder="Search"
+      handleChange={e=>setSearch(e.target.value)}/>
+      <CardList user = {filteredAvator}/> 
+    </div>
+  )
+}
+export default App
